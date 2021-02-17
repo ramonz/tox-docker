@@ -1,5 +1,6 @@
 import os
 import socket
+import platform
 import sys
 import time
 
@@ -49,9 +50,11 @@ def _newaction(venv, message):
 
 def _get_gateway_ip(container):
     gateway = os.getenv('TOX_DOCKER_GATEWAY')
+    on_wsl = sys.platform == "linux" and "microsoft" in str(platform.uname()).lower()
+
     if gateway:
         ip = socket.gethostbyname(gateway)
-    elif sys.platform == "darwin":
+    elif sys.platform == "darwin" or on_wsl:
         # per https://docs.docker.com/v17.12/docker-for-mac/networking/#use-cases-and-workarounds,
         # there is no bridge network available in Docker for Mac, and exposed ports are made
         # available on localhost (but 0.0.0.0 works just as well)
