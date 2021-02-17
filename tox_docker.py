@@ -50,7 +50,10 @@ def _newaction(venv, message):
 
 def _get_gateway_ip(container):
     gateway = os.getenv('TOX_DOCKER_GATEWAY')
-    on_wsl = sys.platform == "linux" and "microsoft" in str(platform.uname()).lower()
+
+    uname = platform.uname()
+    platform_info = ' '.join([uname.version, uname.release]).lower()
+    on_wsl = sys.platform == "linux" and "microsoft" in platform_info
 
     if gateway:
         ip = socket.gethostbyname(gateway)
